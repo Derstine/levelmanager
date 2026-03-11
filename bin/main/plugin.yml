@@ -1,0 +1,11 @@
+name: LevelManager
+version: 1.0.0
+main: me.derstine.levelmanager.LevelManager
+api-version: '1.21'
+description: Manage levels
+author: derstine
+
+commands:
+  level:
+    description: main level command
+    usage: /level

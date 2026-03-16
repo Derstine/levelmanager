@@ -1,0 +1,16 @@
+# 3 scopes:
+#   - total: meaning that the total of something
+#   - 
+
+levels:
+    1:
+        requirements:
+                - title: 
+                  scope: total
+                  metric: 10-blocks
+                - title: Play for 5 minutes
+                  scope: total
+                  metric: PLAY-TIME
+        rewards:
+            commands:
+                - "command to run"

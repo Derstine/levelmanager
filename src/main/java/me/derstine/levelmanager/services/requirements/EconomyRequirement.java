@@ -7,7 +7,8 @@ import org.bukkit.entity.Player;
 public class EconomyRequirement extends Requirement {
     private int money;
 
-    public EconomyRequirement(int money) {
+    public EconomyRequirement(String title, int money) {
+        this.title = title;
         this.money = money;
     }
 

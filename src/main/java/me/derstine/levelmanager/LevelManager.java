@@ -1,5 +1,6 @@
 package me.derstine.levelmanager;
 
+import me.derstine.levelmanager.controllers.LevelCommand;
 import me.derstine.levelmanager.services.database.DatabaseManager;
 import me.derstine.levelmanager.services.database.TableLevels;
 import org.bukkit.command.Command;
@@ -10,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -50,6 +52,8 @@ public class LevelManager extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        getCommand("level").setExecutor(new LevelCommand());
     }
 
     private boolean setupEconomy() {
@@ -74,6 +78,20 @@ public class LevelManager extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
+//        if (command.getName().equalsIgnoreCase("level")) {
+//
+//            if (!(sender instanceof Player player)) {
+//                sender.sendMessage("Only players can use this command.");
+//                return true;
+//            }
+//
+//            PlayerLevelState playerLevelState = playerLevelStates.get(player.getUniqueId());
+//
+//            player.sendMessage("Your level is " + playerLevelState.getLevel());
+//
+//            return true;
+//        }
+
         if (command.getName().equalsIgnoreCase("level")) {
 
             if (!(sender instanceof Player player)) {
@@ -83,7 +101,14 @@ public class LevelManager extends JavaPlugin {
 
             PlayerLevelState playerLevelState = playerLevelStates.get(player.getUniqueId());
 
-            player.sendMessage("Your level is " + playerLevelState.getLevel());
+            String levelUpMessage;
+            try {
+                levelUpMessage = playerLevelState.levelUp();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            player.sendMessage(levelUpMessage);
 
             return true;
         }
@@ -97,6 +122,10 @@ public class LevelManager extends JavaPlugin {
 
     public static void removePlayerLevelState(UUID uuid) {
         playerLevelStates.remove(uuid);
+    }
+
+    public static PlayerLevelState getPlayerLevelState(UUID uuid) {
+        return playerLevelStates.get(uuid);
     }
 
     public static TableLevels getTableLevels() {

@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 public class Requirement {
     protected boolean db = false;
 
-    private String title;
+    protected String title;
 
     public Requirement() {
 

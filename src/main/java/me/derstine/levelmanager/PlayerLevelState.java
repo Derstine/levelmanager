@@ -19,14 +19,15 @@ public class PlayerLevelState {
         this.requirements = requirements;
     }
 
-    // returns false if any of the requirements is not eligible
-    private boolean canLevelUp() {
+    // returns null if eligible, if not eligible then it returns the requirement's title
+    private String canLevelUp() {
         for(Requirement requirement : requirements) {
-            if(!requirement.isEligible(player)) return false;
+            if(!requirement.isEligible(player)) return requirement.getTitle();
         }
-        return true;
+        return null;
     }
 
+    //
     private void commitRequirements() {
         for(Requirement requirement : requirements) {
             requirement.commit(player);
@@ -34,21 +35,18 @@ public class PlayerLevelState {
     }
 
     public String levelUp() throws SQLException {
-        // makes sure player can level if
-        if(!canLevelUp()) return "Failed to level up";
+        // make sure player can level up
+        String error = canLevelUp();
+        if(error != null) return "Need to complete requirement: " + error;
 
         // player can level up, so commit all requirements
         commitRequirements();
 
-        // now update db
-        TableLevels table = LevelManager.getTableLevels();
-        table.setLevel(player.getUniqueId(), level + 1);
-        // update this object
-        level++;
+        // set level
+        setLevel(level + 1);
 
-        // clear the requirements and replace with new level requirements
-        requirements.clear();
-        requirements = Config.getRequirements(level);
+        // give rewards
+
 
         return "Leveled up to level" + level;
     }
@@ -58,10 +56,27 @@ public class PlayerLevelState {
     }
 
     public String printRequirements() {
-        String strSum = "";
+        StringBuilder strSum = new StringBuilder();
         for(Requirement req : requirements) {
-            strSum += req.getTitle() + "\n";
+            strSum.append(req.getTitle()).append("\n");
         }
-        return strSum;
+        return strSum.toString();
+    }
+
+    private void resetRequirements() {
+        requirements.clear();
+        requirements = Config.getRequirements(level);
+    }
+
+    public void setLevel(int level) throws SQLException {
+        // update db
+        TableLevels table = LevelManager.getTableLevels();
+        table.setLevel(player.getUniqueId(), level);
+
+        // update this object
+        this.level = level;
+
+        // reset requirements for the given level
+        resetRequirements();
     }
 }

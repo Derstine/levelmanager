@@ -1,16 +1,36 @@
-# 3 scopes:
-#   - total: meaning that the total of something
-#   - 
+#
+# types: lifetime-statistic, level-statistic, achievement, economy,
+#
+#
+#
+#
 
 levels:
-    1:
-        requirements:
-                - title: 
-                  scope: total
-                  metric: 10-blocks
-                - title: Play for 5 minutes
-                  scope: total
-                  metric: PLAY-TIME
-        rewards:
-            commands:
-                - "command to run"
+  1:
+    requirements:
+      - type: economy
+        title: $100
+        money: 100
+
+    rewards:
+      commands:
+        - "/give USER item:cookie"
+        
+  2:
+    requirements:
+      - type: achievement
+        title: Play for 5 minutes
+        achievement: Getting Wood
+
+      - title: Mine 64 stone
+        scope: level
+        metric: MINE_BLOCK
+        target: stone
+
+      - title: $100
+        type: economy
+        money: 100
+
+    rewards:
+      commands:
+        - "/give USER item:cookie"

@@ -8,7 +8,7 @@ public class EconomyRequirement extends Requirement {
     private int money;
 
     public EconomyRequirement(String title, int money) {
-        this.title = title;
+        super(title);
         this.money = money;
     }
 

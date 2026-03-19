@@ -7,8 +7,8 @@ public class Requirement {
 
     protected String title;
 
-    public Requirement() {
-
+    public Requirement(String title) {
+        this.title = title;
     }
 
     public boolean isEligible(Player player) {

@@ -9,9 +9,9 @@ public class AdvancementRequirement extends Requirement {
     private Advancement advancement;
 
     public AdvancementRequirement(String title, String advancementString) {
+        super(title);
         Advancement advancement = Bukkit.getAdvancement(org.bukkit.NamespacedKey.fromString(advancementString));
 
-        this.title = title;
         this.advancement = advancement;
     }
 

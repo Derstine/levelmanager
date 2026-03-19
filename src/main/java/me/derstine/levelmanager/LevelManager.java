@@ -75,9 +75,23 @@ public class LevelManager extends JavaPlugin {
         getLogger().info("LevelManager disabled.");
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
+//    @Override
+//    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+//
+////        if (command.getName().equalsIgnoreCase("level")) {
+////
+////            if (!(sender instanceof Player player)) {
+////                sender.sendMessage("Only players can use this command.");
+////                return true;
+////            }
+////
+////            PlayerLevelState playerLevelState = playerLevelStates.get(player.getUniqueId());
+////
+////            player.sendMessage("Your level is " + playerLevelState.getLevel());
+////
+////            return true;
+////        }
+//
 //        if (command.getName().equalsIgnoreCase("level")) {
 //
 //            if (!(sender instanceof Player player)) {
@@ -87,34 +101,20 @@ public class LevelManager extends JavaPlugin {
 //
 //            PlayerLevelState playerLevelState = playerLevelStates.get(player.getUniqueId());
 //
-//            player.sendMessage("Your level is " + playerLevelState.getLevel());
+//            String levelUpMessage;
+//            try {
+//                levelUpMessage = playerLevelState.levelUp();
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//            player.sendMessage(levelUpMessage);
 //
 //            return true;
 //        }
-
-        if (command.getName().equalsIgnoreCase("level")) {
-
-            if (!(sender instanceof Player player)) {
-                sender.sendMessage("Only players can use this command.");
-                return true;
-            }
-
-            PlayerLevelState playerLevelState = playerLevelStates.get(player.getUniqueId());
-
-            String levelUpMessage;
-            try {
-                levelUpMessage = playerLevelState.levelUp();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-            player.sendMessage(levelUpMessage);
-
-            return true;
-        }
-
-        return false;
-    }
+//
+//        return false;
+//    }
 
     public static void addPlayerLevelState(UUID uuid, PlayerLevelState playerLevelState) {
         playerLevelStates.put(uuid, playerLevelState);

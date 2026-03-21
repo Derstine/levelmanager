@@ -15,6 +15,7 @@ public class StatisticRequirement extends Requirement {
 
         this.stat = parseStatistic(stat);
         this.target = target.toUpperCase();
+        this.value = value;
     }
 
     protected int getStatistic(Player player) {
@@ -26,13 +27,13 @@ public class StatisticRequirement extends Requirement {
 
             case BLOCK:
             case ITEM:
-                Material material = Material.matchMaterial(target);
+                Material material = Material.valueOf(target);
                 if (material == null) return 0;
 
                 return player.getStatistic(stat, material);
 
             case ENTITY:
-                EntityType entity = EntityType.fromName(target);
+                EntityType entity = EntityType.valueOf(target);
                 if (entity == null) return 0;
 
                 return player.getStatistic(stat, entity);

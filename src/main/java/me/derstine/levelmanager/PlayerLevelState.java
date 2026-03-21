@@ -64,15 +64,15 @@ public class PlayerLevelState {
         return strSum.toString();
     }
 
-    private void resetRequirements() {
+    private void resetRequirements() throws SQLException {
         requirements.clear();
-        requirements = Config.getRequirements(player, 1);
+        requirements = Config.getRequirements(player, level);
     }
 
     public void setLevel(int level) throws SQLException {
         // update db
-        DatabaseManager dbMan = LevelManager.getDbManager();
-        dbMan.setPlayerLevel(player.getUniqueId(), level);
+        DatabaseManager dbManager = LevelManager.getDbManager();
+        dbManager.setPlayerLevel(player.getUniqueId(), level);
 
         // update this object
         this.level = level;

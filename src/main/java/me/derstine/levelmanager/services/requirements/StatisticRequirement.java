@@ -14,7 +14,7 @@ public class StatisticRequirement extends Requirement {
         super(title);
 
         this.stat = parseStatistic(stat);
-        this.target = target;
+        this.target = target.toUpperCase();
     }
 
     protected int getStatistic(Player player) {

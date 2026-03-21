@@ -3,11 +3,8 @@ package me.derstine.levelmanager;
 import me.derstine.levelmanager.config.Config;
 import me.derstine.levelmanager.controllers.LevelCommand;
 import me.derstine.levelmanager.services.database.DatabaseManager;
-import me.derstine.levelmanager.services.database.TableLevelStatisticRequirements;
+import me.derstine.levelmanager.services.database.TableLevelStatsReq;
 import me.derstine.levelmanager.services.database.TableLevels;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.economy.Economy;
@@ -21,9 +18,7 @@ import java.util.UUID;
 public class LevelManager extends JavaPlugin {
     private static Economy econ;
 
-    private static DatabaseManager databaseManager;
-    private static TableLevels tableLevels;
-    private static TableLevelStatisticRequirements tableLevelStatisticRequirements;
+    private static DatabaseManager dbManager;
 
     private static Map<UUID, PlayerLevelState> playerLevelStates;
 
@@ -31,24 +26,13 @@ public class LevelManager extends JavaPlugin {
     public void onEnable() {
         getLogger().info("LevelManager enabled.");
 
-        // db
-        try {
-            databaseManager = new DatabaseManager(this);
-            databaseManager.connect();
-
-            tableLevels = new TableLevels(databaseManager.getConnection());
-            tableLevels.createTable();
-
-            tableLevelStatisticRequirements =
-                    new TableLevelStatisticRequirements(databaseManager.getConnection());
-
-            tableLevelStatisticRequirements.createTable();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         Config.readConfig(this);
+
+        try {
+            dbManager = new DatabaseManager(this);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         // init playerlevelstates map
         playerLevelStates = new HashMap<>();
@@ -97,13 +81,5 @@ public class LevelManager extends JavaPlugin {
         return playerLevelStates.get(uuid);
     }
 
-    public static TableLevels getTableLevels() {
-        return tableLevels;
-    }
-
-    public static TableLevelStatisticRequirements getTableLevelStatisticRequirements() {
-        return tableLevelStatisticRequirements;
-    }
-
-    public static DatabaseManager getDbManager() {return databaseManager;}
+    public static DatabaseManager getDbManager() {return dbManager;}
 }

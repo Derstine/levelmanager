@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 // chatgpt code
-public class TableLevelStatisticRequirements {
+public class TableLevelStatsReq {
 
     private final Connection connection;
 
-    public TableLevelStatisticRequirements(Connection connection) {
+    public TableLevelStatsReq(Connection connection) {
         this.connection = connection;
     }
 
@@ -62,36 +62,6 @@ public class TableLevelStatisticRequirements {
         }
 
         return 0;
-    }
-
-    public void setBaseValue(UUID uuid, String statKey, int baseValue) throws SQLException {
-        String sql = """
-            UPDATE level_statistic_requirements
-            SET base_value = ?
-            WHERE uuid = ? AND stat_key = ?
-        """;
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, baseValue);
-            stmt.setString(2, uuid.toString());
-            stmt.setString(3, statKey);
-            stmt.executeUpdate();
-        }
-    }
-
-    public void addToBaseValue(UUID uuid, String statKey, int amount) throws SQLException {
-        String sql = """
-            UPDATE level_statistic_requirements
-            SET base_value = base_value + ?
-            WHERE uuid = ? AND stat_key = ?
-        """;
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, amount);
-            stmt.setString(2, uuid.toString());
-            stmt.setString(3, statKey);
-            stmt.executeUpdate();
-        }
     }
 
     public void delete(UUID uuid, String statKey) throws SQLException {

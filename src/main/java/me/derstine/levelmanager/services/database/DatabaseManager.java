@@ -15,11 +15,24 @@ public class DatabaseManager {
     private final JavaPlugin plugin;
     private Connection connection;
 
-    public DatabaseManager(JavaPlugin plugin) {
+    private TableLevels tableLevels;
+    private TableLevelStatsReq tableLevelStatsReq;
+
+    public DatabaseManager(JavaPlugin plugin) throws SQLException {
         this.plugin = plugin;
+
+        connect();
+
+        tableLevels = new TableLevels(connection);
+        tableLevels.createTable();
+
+        tableLevelStatsReq = new TableLevelStatsReq(connection);
+        tableLevelStatsReq.createTable();
+
+
     }
 
-    public void connect() throws SQLException {
+    private void connect() throws SQLException {
         File dbFile = new File(plugin.getDataFolder(), "levels.db");
 
         if (!plugin.getDataFolder().exists()) {
@@ -30,15 +43,11 @@ public class DatabaseManager {
         connection.createStatement().execute("PRAGMA foreign_keys = ON;");
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
     // use this function to set the player level cause it removes all entries in level stats table
     public void setPlayerLevel(UUID playerId, int newLevel) throws SQLException {
 
-        String updateLevelSql = "UPDATE levels SET level = ? WHERE uuid = ?";
-        String deleteStatsSql = "DELETE FROM level_statistics WHERE uuid = ?";
+        String updateLevelSql = "UPDATE player_levels SET level = ? WHERE uuid = ?";
+        String deleteStatsSql = "DELETE FROM level_statistic_requirements WHERE uuid = ?";
 
         try {
             connection.setAutoCommit(false);
@@ -65,5 +74,24 @@ public class DatabaseManager {
         } finally {
             connection.setAutoCommit(true);
         }
+    }
+
+    public void insertNewPlayer(UUID uuid) throws SQLException {
+        tableLevels.insertNewPlayer(uuid);
+    }
+    public int getPlayerLevel(UUID uuid) throws SQLException {
+        return tableLevels.getLevel(uuid);
+    }
+
+    public void insertLevelStatReq(UUID uuid, String statKey, int baseValue) throws SQLException {
+        tableLevelStatsReq.insert(uuid, statKey, baseValue);
+    }
+
+    public boolean levelStatReqExists(UUID uuid, String statKey) throws SQLException {
+        return tableLevelStatsReq.exists(uuid, statKey);
+    }
+
+    public int getLevelStatReq(UUID uuid, String statKey) throws SQLException {
+        return tableLevelStatsReq.getBaseValue(uuid, statKey);
     }
 }

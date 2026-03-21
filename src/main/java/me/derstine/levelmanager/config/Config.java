@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.UUID;
 public class Config {
     private static Map<String, ArrayList<Map<String, String>>> configMap;
 
-    public static ArrayList<Requirement> getRequirements(Player player, int level) {
+    public static ArrayList<Requirement> getRequirements(Player player, int level) throws SQLException {
         ArrayList<Requirement> requirements = new ArrayList<>();
 
         ArrayList<Map<String, String>> levelMap = configMap.get(String.valueOf(level));

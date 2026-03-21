@@ -8,10 +8,12 @@ import org.bukkit.entity.Player;
 public class StatisticRequirement extends Requirement {
     protected Statistic stat;
     protected String target;
+    protected int value;
 
-    public StatisticRequirement(String title, Statistic stat, String target) {
+    public StatisticRequirement(String title, String stat, String target, int value) {
         super(title);
-        this.stat = stat;
+
+        this.stat = parseStatistic(stat);
         this.target = target;
     }
 
@@ -37,6 +39,18 @@ public class StatisticRequirement extends Requirement {
 
             default:
                 return 0;
+        }
+    }
+
+    private static Statistic parseStatistic(String input) {
+        if (input == null) {
+            throw new IllegalArgumentException("Statistic cannot be null");
+        }
+
+        try {
+            return Statistic.valueOf(input.trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid statistic: " + input);
         }
     }
 }

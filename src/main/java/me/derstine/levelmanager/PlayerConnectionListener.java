@@ -29,7 +29,7 @@ public class PlayerConnectionListener implements Listener {
             level = 1;
         }
 
-        ArrayList<Requirement> requirements = Config.getRequirements(level);
+        ArrayList<Requirement> requirements = Config.getRequirements(event.getPlayer(), level);
 
         PlayerLevelState playerLevelState = new PlayerLevelState(event.getPlayer(), level, requirements);
 

@@ -1,7 +1,9 @@
 package me.derstine.levelmanager;
 
+import me.derstine.levelmanager.config.Config;
 import me.derstine.levelmanager.controllers.LevelCommand;
 import me.derstine.levelmanager.services.database.DatabaseManager;
+import me.derstine.levelmanager.services.database.TableLevelStatisticRequirements;
 import me.derstine.levelmanager.services.database.TableLevels;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,6 +23,7 @@ public class LevelManager extends JavaPlugin {
 
     private static DatabaseManager databaseManager;
     private static TableLevels tableLevels;
+    private static TableLevelStatisticRequirements tableLevelStatisticRequirements;
 
     private static Map<UUID, PlayerLevelState> playerLevelStates;
 
@@ -36,9 +39,16 @@ public class LevelManager extends JavaPlugin {
             tableLevels = new TableLevels(databaseManager.getConnection());
             tableLevels.createTable();
 
+            tableLevelStatisticRequirements =
+                    new TableLevelStatisticRequirements(databaseManager.getConnection());
+
+            tableLevelStatisticRequirements.createTable();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Config.readConfig(this);
 
         // init playerlevelstates map
         playerLevelStates = new HashMap<>();
@@ -75,47 +85,6 @@ public class LevelManager extends JavaPlugin {
         getLogger().info("LevelManager disabled.");
     }
 
-//    @Override
-//    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-//
-////        if (command.getName().equalsIgnoreCase("level")) {
-////
-////            if (!(sender instanceof Player player)) {
-////                sender.sendMessage("Only players can use this command.");
-////                return true;
-////            }
-////
-////            PlayerLevelState playerLevelState = playerLevelStates.get(player.getUniqueId());
-////
-////            player.sendMessage("Your level is " + playerLevelState.getLevel());
-////
-////            return true;
-////        }
-//
-//        if (command.getName().equalsIgnoreCase("level")) {
-//
-//            if (!(sender instanceof Player player)) {
-//                sender.sendMessage("Only players can use this command.");
-//                return true;
-//            }
-//
-//            PlayerLevelState playerLevelState = playerLevelStates.get(player.getUniqueId());
-//
-//            String levelUpMessage;
-//            try {
-//                levelUpMessage = playerLevelState.levelUp();
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//            player.sendMessage(levelUpMessage);
-//
-//            return true;
-//        }
-//
-//        return false;
-//    }
-
     public static void addPlayerLevelState(UUID uuid, PlayerLevelState playerLevelState) {
         playerLevelStates.put(uuid, playerLevelState);
     }
@@ -131,4 +100,10 @@ public class LevelManager extends JavaPlugin {
     public static TableLevels getTableLevels() {
         return tableLevels;
     }
+
+    public static TableLevelStatisticRequirements getTableLevelStatisticRequirements() {
+        return tableLevelStatisticRequirements;
+    }
+
+    public static DatabaseManager getDbManager() {return databaseManager;}
 }

@@ -8,29 +8,30 @@
 levels:
   1:
     requirements:
+      # money
       - type: economy
         title: $100
         money: 100
 
-    rewards:
-      commands:
-        - "/give USER item:cookie"
-        
-  2:
-    requirements:
-      - type: achievement
-        title: Play for 5 minutes
-        achievement: Getting Wood
+      # advancement
+      - type: advancement
+        title: Complete the Stone Age Advancement
+        advancement: story/mine_stone
 
-      - title: Mine 64 stone
-        scope: level
+      # lifetime statistic
+      - type: lifetime-statistic
+        title: Mine a total of 128 stone
         metric: MINE_BLOCK
         target: stone
+        value: 128
 
-      - title: $100
-        type: economy
-        money: 100
+      # level statistic
+      - type: level-statistic
+        title: Mine 64 stone
+        metric: MINE_BLOCK
+        target: stone
+        value: 64
 
-    rewards:
-      commands:
-        - "/give USER item:cookie"
+#    rewards:
+#      commands:
+#        - "/give USER item:cookie"

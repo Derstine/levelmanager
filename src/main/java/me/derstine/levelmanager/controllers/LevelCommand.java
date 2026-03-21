@@ -43,6 +43,18 @@ public class LevelCommand implements CommandExecutor {
             return true;
         }
 
+        // /level reset
+        if (args[0].equalsIgnoreCase("reset")) {
+            try {
+                playerLevelState.setLevel(1);
+                player.sendMessage("Level reset");
+            } catch (SQLException e) {
+                player.sendMessage("There was an error while leveling up.");
+                e.printStackTrace();
+            }
+            return true;
+        }
+
         player.sendMessage("Unknown subcommand. Use /level help");
         return true;
     }

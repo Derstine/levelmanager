@@ -4,11 +4,9 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
 public class LifetimeStatistic extends StatisticRequirement {
-    private int value;
 
-    public LifetimeStatistic(String title, Statistic stat, String target, int value) {
-        super(title, stat, target);
-        this.value = value;
+    public LifetimeStatistic(String title, String stat, String target, int value) {
+        super(title, stat, target, value);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package me.derstine.levelmanager;
 
 import me.derstine.levelmanager.config.Config;
+import me.derstine.levelmanager.services.database.DatabaseManager;
 import me.derstine.levelmanager.services.database.TableLevels;
 import me.derstine.levelmanager.services.requirements.Requirement;
 import org.bukkit.entity.Player;
@@ -65,13 +66,13 @@ public class PlayerLevelState {
 
     private void resetRequirements() {
         requirements.clear();
-        requirements = Config.getRequirements(level);
+        requirements = Config.getRequirements(player, 1);
     }
 
     public void setLevel(int level) throws SQLException {
         // update db
-        TableLevels table = LevelManager.getTableLevels();
-        table.setLevel(player.getUniqueId(), level);
+        DatabaseManager dbMan = LevelManager.getDbManager();
+        dbMan.setPlayerLevel(player.getUniqueId(), level);
 
         // update this object
         this.level = level;
@@ -79,4 +80,6 @@ public class PlayerLevelState {
         // reset requirements for the given level
         resetRequirements();
     }
+
+
 }
